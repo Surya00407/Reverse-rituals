@@ -10,6 +10,7 @@ import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { siteImage } from '../utils/siteImages';
 
 const CheckoutPage = () => {
   const { cartItems, cartTotal, clearCart } = useCart();
@@ -667,9 +668,9 @@ const CheckoutPage = () => {
                     <span className="text-[9px] font-black text-[#064e3b]/40 uppercase tracking-[0.3em]">Encrypted Checkout</span>
                   </div>
                   <div className="flex items-center justify-center gap-4 grayscale opacity-40 hover:opacity-100 hover:grayscale-0 transition-all cursor-default">
-                    <img src={new URL('../assets/GPAY.webp', import.meta.url).href} alt="GPay" className="h-5" />
-                    <img src={new URL('../assets/PAYTYM.webp', import.meta.url).href} alt="Paytm" className="h-5" />
-                    <img src={new URL('../assets/PHONEPE.webp', import.meta.url).href} alt="PhonePe" className="h-5" />
+                    <img src={siteImage('GPAY')} alt="GPay" className="h-5" />
+                    <img src={siteImage('PAYTYM')} alt="Paytm" className="h-5" />
+                    <img src={siteImage('PHONEPE')} alt="PhonePe" className="h-5" />
                   </div>
                 </div>
               </div>

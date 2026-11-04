@@ -2,12 +2,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { X, FlaskConical, ShieldCheck, Sparkles, Play } from "lucide-react";
 import { Link } from "react-router-dom";
+import { siteImage } from '../utils/siteImages';
 
 
 const ingredients = [
     {
         name: "Rosemary",
-        emoji: new URL('../assets/rosemary.webp', import.meta.url).href,
+        emoji: siteImage('rosemary'),
         angle: 0,
         tagline: "The Growth Catalyst",
         details: `Rosemary Alchemy Water is your main active ingredient for growth.
@@ -23,7 +24,7 @@ Benefits:
     },
     {
         name: "Bhringraj",
-        emoji: new URL('../assets/bhringiraj.webp', import.meta.url).href,
+        emoji: siteImage('bhringiraj'),
         angle: 72,
         tagline: "King of Hair",
         details: `Also known as "King of Hair" in Ayurveda, it works deeply on regrowth.
@@ -39,7 +40,7 @@ Benefits:
     },
     {
         name: "Fenugreek",
-        emoji: new URL('../assets/fenugreek.webp', import.meta.url).href,
+        emoji: siteImage('fenugreek'),
         angle: 144,
         tagline: "The Strengthener",
         details: `Acts as a natural conditioner + strengthening agent.
@@ -55,7 +56,7 @@ Benefits:
     },
     {
         name: "Black Seeds",
-        emoji: new URL('../assets/blackseed.webp', import.meta.url).href,
+        emoji: siteImage('blackseed'),
         angle: 216,
         tagline: "Scalp Healer",
         details: `Provides scalp healing and follicle stimulation.
@@ -71,7 +72,7 @@ Benefits:
     },
     {
         name: "Clove",
-        emoji: new URL('../assets/clove.webp', import.meta.url).href,
+        emoji: siteImage('clove'),
         angle: 288,
         tagline: "Circulation Booster",
         details: `Works as a circulation booster + scalp cleanser.
@@ -190,7 +191,7 @@ const ProductShowcase = () => {
 
                         {/* Center Bottle */}
                         <motion.img
-                            src={new URL('../assets/ingredient.webp', import.meta.url).href}
+                            src={siteImage('ingredient')}
                             alt="Signature Alchemy Water"
                             className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-36 md:w-[480px]"
                             animate={{ y: [0, -20, 0] }}
@@ -396,7 +397,7 @@ const VideoShowcase = () => {
             id: 1,
             title: "How to Prepare & Use",
             thumbnail: "https://www.youtube.com/watch?v=b3pwU9jpzhE",
-            poster: new URL('../assets/video.webp', import.meta.url).href,
+            poster: siteImage('video'),
             duration: "3:29"
         }
     ];

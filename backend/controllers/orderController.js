@@ -532,11 +532,10 @@ const getMyOrders = async (req, res) => {
 // @route   GET /api/orders
 // @access  Private/Admin
 const getOrders = async (req, res) => {
-  const orders = await Order.find({}).sort({ createdAt: -1 });
+  const orders = await Order.find({}).sort({ createdAt: -1 }).lean();
 
   // Add status field to orders that don't have it (for display only)
-  const ordersWithStatus = orders.map(order => {
-    const orderObj = order.toObject();
+  const ordersWithStatus = orders.map(orderObj => {
     if (!orderObj.status) {
       if (orderObj.isDelivered) {
         orderObj.status = 'Delivered';

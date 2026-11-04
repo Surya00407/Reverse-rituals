@@ -6,6 +6,7 @@ import axios from "axios";
 import "../index.css"
 
 import "swiper/css";
+import { siteImage } from '../utils/siteImages';
 
 const ReviewSection = () => {
   const [reviews, setReviews] = useState([]);
@@ -29,15 +30,15 @@ const ReviewSection = () => {
   }, []);
 
   const defaultReviews = [
-    { _id: 'local-1', image: new URL('../assets/reviews/review-1.webp', import.meta.url).href, isLocal: true },
-    { _id: 'local-2', image: new URL('../assets/reviews/review-2.webp', import.meta.url).href, isLocal: true },
-    { _id: 'local-3', image: new URL('../assets/reviews/review-3.webp', import.meta.url).href, isLocal: true },
-    { _id: 'local-4', image: new URL('../assets/reviews/review-4.webp', import.meta.url).href, isLocal: true },
-    { _id: 'local-5', image: new URL('../assets/reviews/review-5.webp', import.meta.url).href, isLocal: true },
-    { _id: 'local-6', image: new URL('../assets/reviews/review-6.webp', import.meta.url).href, isLocal: true },
-    { _id: 'local-7', image: new URL('../assets/reviews/review-7.webp', import.meta.url).href, isLocal: true },
-    { _id: 'local-8', image: new URL('../assets/reviews/review-8.webp', import.meta.url).href, isLocal: true },
-    { _id: 'local-9', image: new URL('../assets/reviews/review-9.webp', import.meta.url).href, isLocal: true },
+    { _id: 'local-1', image: siteImage('review-1'), isLocal: true },
+    { _id: 'local-2', image: siteImage('review-2'), isLocal: true },
+    { _id: 'local-3', image: siteImage('review-3'), isLocal: true },
+    { _id: 'local-4', image: siteImage('review-4'), isLocal: true },
+    { _id: 'local-5', image: siteImage('review-5'), isLocal: true },
+    { _id: 'local-6', image: siteImage('review-6'), isLocal: true },
+    { _id: 'local-7', image: siteImage('review-7'), isLocal: true },
+    { _id: 'local-8', image: siteImage('review-8'), isLocal: true },
+    { _id: 'local-9', image: siteImage('review-9'), isLocal: true },
   ];
 
   const displayReviews = [...reviews, ...defaultReviews];

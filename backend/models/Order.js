@@ -50,4 +50,8 @@ const orderSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
+orderSchema.index({ createdAt: -1 });
+orderSchema.index({ isPaid: 1, paidAt: -1 });
+orderSchema.index({ 'shippingAddress.phone': 1 });
+
 module.exports = mongoose.model('Order', orderSchema);

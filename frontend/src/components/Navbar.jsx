@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import { AnimatePresence, motion } from 'framer-motion';
 import axios from 'axios';
+import { siteImage } from '../utils/siteImages';
 
 const WHATSAPP_NUMBER = "917358422064";
 
@@ -104,7 +105,7 @@ const Navbar = () => {
             className="absolute left-1/2 -translate-x-1/2 md:hidden"
           >
             <img
-              src={new URL('../assets/rr-logo.webp', import.meta.url).href}
+              src={siteImage('rr-logo')}
               alt="Reverse Rituals"
               className="h-10 object-contain"
             />
@@ -116,7 +117,7 @@ const Navbar = () => {
             {/* Logo */}
             <Link to="/" className="flex items-center group">
               <div className="w-14 lg:w-16 transition-transform group-hover:scale-110">
-                <img src={new URL('../assets/rr-logo.webp', import.meta.url).href} alt="Reverse Rituals" className="w-full object-contain" />
+                <img src={siteImage('rr-logo')} alt="Reverse Rituals" className="w-full object-contain" />
               </div>
             </Link>
 
@@ -237,7 +238,7 @@ const Navbar = () => {
               {/* Header */}
               <div className="flex items-center justify-between p-5 border-b">
                 <Link to="/" onClick={() => setIsMenuOpen(false)}>
-                  <img src={new URL('../assets/rr-logo.webp', import.meta.url).href} alt="logo" className="h-10" />
+                  <img src={siteImage('rr-logo')} alt="logo" className="h-10" />
                 </Link>
 
                 <button onClick={() => setIsMenuOpen(false)}>

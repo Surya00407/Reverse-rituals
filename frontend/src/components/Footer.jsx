@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { siteImage } from '../utils/siteImages';
 
 const Footer = () => {
   return (
@@ -8,7 +9,7 @@ const Footer = () => {
         <div>
           <div className="flex items-center gap-3 mb-6">
             <img
-              src={new URL('../assets/rr-logo-white.webp', import.meta.url).href}
+              src={siteImage('rr-logo-white')}
               alt="Reverse Rituals"
               className="w-12 h-12 object-contain"
             />

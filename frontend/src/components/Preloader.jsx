@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { siteImage } from '../utils/siteImages';
 
 const Preloader = () => {
     const [loading, setLoading] = useState(true);
@@ -39,7 +40,7 @@ const Preloader = () => {
                             className="relative flex flex-col items-center"
                         >
                             <img
-                                src={new URL('../assets/rr-logo.webp', import.meta.url).href}
+                                src={siteImage('rr-logo')}
                                 alt="Reverse Rituals"
                                 className="w-24 h-24 md:w-32 md:h-32 object-contain mb-8"
                                 fetchPriority="high"

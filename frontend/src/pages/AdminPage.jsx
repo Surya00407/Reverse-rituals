@@ -9,8 +9,6 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-toastify';
-import { jsPDF } from 'jspdf';
-import html2pdf from 'html2pdf.js';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, Legend, AreaChart, Area } from 'recharts';
 import ImageUpload from '../components/ImageUpload';
 import ReviewsSection from './ReviewsSection';
@@ -43,6 +41,15 @@ const displayPhone = (phone) => {
   }
   
   return trimmed;
+};
+
+// PDF libraries are heavy (~1MB), so load them only when a bill/label is generated
+const loadPdfLibs = async () => {
+  const [{ jsPDF }, { default: html2pdf }] = await Promise.all([
+    import('jspdf'),
+    import('html2pdf.js'),
+  ]);
+  return { jsPDF, html2pdf };
 };
 
 const getFullUrl = (url) => {
@@ -108,9 +115,11 @@ const AdminPage = () => {
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
 
-      const statsRes = await axios.get(`${API_URL}/api/analytics/admin/stats?filter=${filter}`, config);
-      const visitsRes = await axios.get(`${API_URL}/api/analytics/admin/visits-graph?days=${graphDays}`, config);
-      const ordersRes = await axios.get(`${API_URL}/api/analytics/admin/orders-graph?days=${graphDays}`, config);
+      const [statsRes, visitsRes, ordersRes] = await Promise.all([
+        axios.get(`${API_URL}/api/analytics/admin/stats?filter=${filter}`, config),
+        axios.get(`${API_URL}/api/analytics/admin/visits-graph?days=${graphDays}`, config),
+        axios.get(`${API_URL}/api/analytics/admin/orders-graph?days=${graphDays}`, config),
+      ]);
 
       setAnalyticsStats(statsRes.data);
       setVisitsGraph(visitsRes.data);
@@ -141,40 +150,31 @@ const AdminPage = () => {
     setLoading(true);
     try {
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+      const authConfig = { headers: { Authorization: `Bearer ${user?.token}` } };
 
-      let productsRes = { data: [] };
-      try {
-        productsRes = await axios.get(`${API_URL}/api/products`);
-      } catch (err) {
-        console.log('Products fetch error:', err.message);
-      }
+      // Fire all three requests at once instead of one after another
+      const [productsRes, ordersRes, usersRes] = await Promise.all([
+        axios.get(`${API_URL}/api/products`).catch((err) => {
+          console.log('Products fetch error:', err.message);
+          return { data: [] };
+        }),
+        user?.token
+          ? axios.get(`${API_URL}/api/orders`, authConfig).catch((err) => {
+              console.log('Orders fetch error:', err.message);
+              return { data: [] };
+            })
+          : { data: [] },
+        user?.token && user.isAdmin
+          ? axios.get(`${API_URL}/api/users/all`, authConfig).catch((err) => {
+              console.log('Users fetch error:', err.message);
+              return { data: [] };
+            })
+          : { data: [] },
+      ]);
 
       setProducts(productsRes.data || []);
-
-      let ordersRes = { data: [] };
-      if (user?.token) {
-        try {
-          ordersRes = await axios.get(`${API_URL}/api/orders`, {
-            headers: { Authorization: `Bearer ${user.token}` }
-          });
-        } catch (err) {
-          console.log('Orders fetch error:', err.message);
-        }
-      }
       setOrders(ordersRes.data || []);
-
-      let usersRes = { data: [] };
-      if (user?.token && user.isAdmin) {
-        try {
-          usersRes = await axios.get(`${API_URL}/api/users/all`, {
-            headers: { Authorization: `Bearer ${user.token}` }
-          });
-        } catch (err) {
-          console.log('Users fetch error:', err.message);
-        }
-      }
       setCustomers(usersRes.data || []);
-
     } catch (error) {
       console.error('Error fetching data:', error);
       setProducts([]);
@@ -332,7 +332,7 @@ const AdminPage = () => {
   const downloadThermalBill = async (order) => {
     setThermalGenerating(order._id);
     try {
-      await loadTamilFont();
+      const [{ jsPDF, html2pdf }] = await Promise.all([loadPdfLibs(), loadTamilFont()]);
       const element = document.createElement('div');
       element.innerHTML = getThermalBillHTML(order);
 
@@ -376,7 +376,7 @@ const AdminPage = () => {
     }
 
     try {
-      await loadTamilFont();
+      const [{ jsPDF, html2pdf }] = await Promise.all([loadPdfLibs(), loadTamilFont()]);
       let filenameDate = new Date().toISOString().slice(0, 10);
       if (exportDate) {
         filenameDate = new Date(exportDate).toISOString().slice(0, 10);
@@ -572,6 +572,7 @@ const AdminPage = () => {
       pagebreak: { mode: ['css', 'legacy'] }
     };
 
+    const { html2pdf } = await loadPdfLibs();
     html2pdf().set(opt).from(element).save();
   };
 

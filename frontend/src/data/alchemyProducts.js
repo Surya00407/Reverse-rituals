@@ -1,3 +1,5 @@
+import { siteImage } from '../utils/siteImages';
+
 export const alchemyProducts = [
   {
     _id: 'alchemy-water',
@@ -88,7 +90,7 @@ export const alchemyProducts = [
   {
     _id: 're-ritual',
     name: 'Re-Ritual',
-    image: new URL('../assets/product-powder .jpeg', import.meta.url).href,
+    image: siteImage('product-powder'),
     description: 'If you’ve already purchased the combo, you can buy Re-Ritual and continue using it regularly for consistent results. It comes with 7 pack of Rosemary Raw Materials.',
     price: 299,
     category: 'Hair Care',

@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingCart, Trash2, ArrowRight, Minus, Plus, Package, ArrowLeft, ShieldCheck, Truck, Lock } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { motion, AnimatePresence } from 'framer-motion';
+import { siteImage } from '../utils/siteImages';
 
 const CartPage = () => {
   const { cartItems, removeFromCart, cartTotal, updateQuantity } = useCart();
@@ -197,9 +198,9 @@ const CartPage = () => {
               <div className="mt-8 pt-8 border-t border-[#064e3b]/5 text-center">
                 <p className="text-[#064e3b]/20 text-[10px] font-black uppercase tracking-[0.3em] mb-5">Accepted Payment Methods</p>
                 <div className="flex items-center justify-center gap-6 opacity-60 hover:opacity-100 transition-opacity">
-                  <img src={new URL('../assets/GPAY.webp', import.meta.url).href} alt="GPay" className="h-6 grayscale hover:grayscale-0 transition-all" />
-                  <img src={new URL('../assets/PAYTYM.webp', import.meta.url).href} alt="Paytm" className="h-6 grayscale hover:grayscale-0 transition-all" />
-                  <img src={new URL('../assets/PHONEPE.webp', import.meta.url).href} alt="PhonePe" className="h-6 grayscale hover:grayscale-0 transition-all" />
+                  <img src={siteImage('GPAY')} alt="GPay" className="h-6 grayscale hover:grayscale-0 transition-all" />
+                  <img src={siteImage('PAYTYM')} alt="Paytm" className="h-6 grayscale hover:grayscale-0 transition-all" />
+                  <img src={siteImage('PHONEPE')} alt="PhonePe" className="h-6 grayscale hover:grayscale-0 transition-all" />
                 </div>
                 <div className="mt-6 flex items-center justify-center gap-2 text-[9px] font-black text-[#064e3b]/30 uppercase tracking-[0.2em]">
                   <Lock size={10} /> Secure checkout with Razorpay

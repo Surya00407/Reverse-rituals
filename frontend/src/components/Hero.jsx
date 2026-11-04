@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Sparkles, ShieldCheck, Droplets } from "lucide-react";
 import { Link } from "react-router-dom";
+import { siteImage } from '../utils/siteImages';
 
 const Hero = () => {
   const [current, setCurrent] = useState(0);
@@ -37,7 +38,7 @@ const Hero = () => {
     <section
       className="relative w-full h-[780px] md:h-[600px] lg:h-[600px] overflow-hidden bg-[#fdfbf7]"
       style={{
-        backgroundImage: `url(${new URL('../assets/leaves-bg.webp', import.meta.url).href})`,
+        backgroundImage: `url(${siteImage('leaves-bg')})`,
         backgroundSize: "cover",
         backgroundPosition: "center"
       }}
@@ -52,7 +53,7 @@ const Hero = () => {
   <div className="w-[280px] md:w-[350px] lg:w-[420px] relative top-5 md:top-0">
     
     <motion.img
-      src={new URL('../assets/ingredient.webp', import.meta.url).href}
+      src={siteImage('ingredient')}
       alt="Hair Growth Product"
      className="w-full object-contain drop-shadow-xl will-change-transform"
       

@@ -1,24 +1,27 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import Layout from './components/Layout';
 import Preloader from './components/Preloader';
 import HomePage from './pages/HomePage';
-import ShopPage from './pages/ShopPage';
-import ProductPage from './pages/ProductPage';
-import CartPage from './pages/CartPage';
-import LoginPage from './pages/LoginPage';
-import SignupPage from './pages/SignupPage';
-import ForgotPasswordPage from './pages/ForgotPasswordPage';
-import CheckoutPage from './pages/CheckoutPage';
-import AdminPage from './pages/AdminPage';
-import AboutPage from './pages/AboutPage';
-import OrdersPage from './pages/OrdersPage';
-import TermsPage from './pages/TermsPage';
-import PrivacyPage from './pages/PrivacyPage';
-import OrderSuccessPage from './pages/OrderSuccessPage';
-import TrackOrderPage from './pages/TrackOrderPage';
+
+// Only the home page ships in the main bundle; other pages (especially the
+// admin page with charts/PDF libs) load on demand.
+const ShopPage = lazy(() => import('./pages/ShopPage'));
+const ProductPage = lazy(() => import('./pages/ProductPage'));
+const CartPage = lazy(() => import('./pages/CartPage'));
+const LoginPage = lazy(() => import('./pages/LoginPage'));
+const SignupPage = lazy(() => import('./pages/SignupPage'));
+const ForgotPasswordPage = lazy(() => import('./pages/ForgotPasswordPage'));
+const CheckoutPage = lazy(() => import('./pages/CheckoutPage'));
+const AdminPage = lazy(() => import('./pages/AdminPage'));
+const AboutPage = lazy(() => import('./pages/AboutPage'));
+const OrdersPage = lazy(() => import('./pages/OrdersPage'));
+const TermsPage = lazy(() => import('./pages/TermsPage'));
+const PrivacyPage = lazy(() => import('./pages/PrivacyPage'));
+const OrderSuccessPage = lazy(() => import('./pages/OrderSuccessPage'));
+const TrackOrderPage = lazy(() => import('./pages/TrackOrderPage'));
 
 
 import VisitTracker from './components/VisitTracker';
@@ -30,6 +33,7 @@ function App() {
         <Preloader />
         <BrowserRouter>
           <VisitTracker />
+          <Suspense fallback={<div className="min-h-screen" />}>
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<HomePage />} />
@@ -51,6 +55,7 @@ function App() {
 
             </Route>
           </Routes>
+          </Suspense>
         </BrowserRouter>
       </CartProvider>
     </AuthProvider>

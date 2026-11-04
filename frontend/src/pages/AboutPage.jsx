@@ -2,6 +2,7 @@ import React from 'react';
 import { Leaf, FlaskConical, Globe, Award, Target, Heart, Check, Droplets, Sparkles, Users } from 'lucide-react';
 import ReviewSection from '../components/ReviewSection';
 import AboutSection from '../components/AboutSection';
+import { siteImage } from '../utils/siteImages';
 
 const AboutPage = () => {
   return (
@@ -25,7 +26,7 @@ const AboutPage = () => {
           <div className="relative">
             <div className="aspect-[3/4] rounded-2xl overflow-hidden bg-white shadow-lg">
               <img
-                src={new URL('../assets/sadiq.webp', import.meta.url).href}
+                src={siteImage('sadiq')}
                 alt="R. Sadiq Basha - Founder"
                 className="w-full h-full object-cover"
               />
