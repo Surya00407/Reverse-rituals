@@ -774,9 +774,13 @@ const AdminPage = () => {
     return processedOrders.filter(order => {
       const fullName = order.shippingAddress?.fullName || '';
       const orderIdStr = order.orderId || order._id || '';
+      const phoneStr = order.shippingAddress?.phone || '';
+      const altPhoneStr = order.shippingAddress?.altPhone || '';
       const matchesSearch =
         fullName.toLowerCase().includes(debouncedSearchQuery.toLowerCase()) ||
-        orderIdStr.toLowerCase().includes(debouncedSearchQuery.toLowerCase());
+        orderIdStr.toLowerCase().includes(debouncedSearchQuery.toLowerCase()) ||
+        phoneStr.toLowerCase().includes(debouncedSearchQuery.toLowerCase()) ||
+        altPhoneStr.toLowerCase().includes(debouncedSearchQuery.toLowerCase());
 
       let matchesStatus = true;
       if (exportStatus === 'paid') matchesStatus = order.isPaid;
@@ -1045,8 +1049,13 @@ const AdminPage = () => {
                         <ShoppingBag size={20} className="text-[#064e3b]" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-bold text-[#064e3b] truncate">{order.shippingAddress.fullName}</p>
-                        <p className="text-[#064e3b]/40 text-sm">{order.orderItems.length} items • ₹{order.totalPrice}</p>
+                        <p className="font-bold text-[#064e3b] truncate">{order.shippingAddress?.fullName || 'N/A'}</p>
+                        <p className="text-[#064e3b]/40 text-sm">
+                          {order.orderItems?.length || 0} items • ₹{order.totalPrice}
+                          {order.shippingAddress?.phone && (
+                            <span> • {displayPhone(order.shippingAddress.phone)}</span>
+                          )}
+                        </p>
                       </div>
                       <div>
                         {order.isDelivered ? (
@@ -1338,8 +1347,18 @@ const AdminPage = () => {
                         <ShoppingBag size={18} className="text-[#064e3b]" />
                       </div>
                       <div>
-                        <p className="font-bold text-[#064e3b] text-sm sm:text-base">{order.shippingAddress.fullName}</p>
-                        <p className="text-[#064e3b]/40 text-xs sm:text-sm">#{order.orderId || order._id.slice(-8)} • {new Date(order.createdAt).toLocaleDateString()}</p>
+                        <p className="font-bold text-[#064e3b] text-sm sm:text-base">{order.shippingAddress?.fullName || 'N/A'}</p>
+                        <p className="text-[#064e3b]/40 text-xs sm:text-sm flex flex-wrap items-center gap-x-1.5">
+                          <span>#{order.orderId || order._id.slice(-8)}</span>
+                          <span>•</span>
+                          <span>{new Date(order.createdAt).toLocaleDateString()}</span>
+                          {order.shippingAddress?.phone && (
+                            <>
+                              <span>•</span>
+                              <span className="text-[#064e3b]/70 font-semibold">{displayPhone(order.shippingAddress.phone)}</span>
+                            </>
+                          )}
+                        </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2 sm:gap-4">
@@ -1424,14 +1443,14 @@ const AdminPage = () => {
                                   onClick={() => {
                                     setEditingOrderAddress(order);
                                     setOrderAddressForm({
-                                      fullName: order.shippingAddress.fullName || '',
-                                      address: order.shippingAddress.address || '',
-                                      city: order.shippingAddress.city || '',
-                                      state: order.shippingAddress.state || '',
-                                      zipCode: order.shippingAddress.zipCode || '',
-                                      country: order.shippingAddress.country || 'India',
-                                      phone: order.shippingAddress.phone || '',
-                                      altPhone: order.shippingAddress.altPhone || '',
+                                      fullName: order.shippingAddress?.fullName || '',
+                                      address: order.shippingAddress?.address || '',
+                                      city: order.shippingAddress?.city || '',
+                                      state: order.shippingAddress?.state || '',
+                                      zipCode: order.shippingAddress?.zipCode || '',
+                                      country: order.shippingAddress?.country || 'India',
+                                      phone: order.shippingAddress?.phone || '',
+                                      altPhone: order.shippingAddress?.altPhone || '',
                                     });
                                   }}
                                   className="p-1.5 text-[#064e3b] hover:text-[#c5a059] transition-colors"
@@ -1440,10 +1459,55 @@ const AdminPage = () => {
                                 </button>
                               </div>
                               <div className="space-y-2 text-[#064e3b]">
-                                <p className="font-bold">{order.shippingAddress.fullName}</p>
-                                <p className="text-sm">{order.shippingAddress.address}</p>
-                                <p className="text-sm">{order.shippingAddress.city}, {order.shippingAddress.zipCode}</p>
-                                <p className="text-sm">{order.shippingAddress.country}</p>
+                                <p className="font-bold">{order.shippingAddress?.fullName || 'N/A'}</p>
+                                <p className="text-sm">{order.shippingAddress?.address}</p>
+                                <p className="text-sm">
+                                  {order.shippingAddress?.city}
+                                  {order.shippingAddress?.state ? `, ${order.shippingAddress.state}` : ''}
+                                  {order.shippingAddress?.zipCode ? ` - ${order.shippingAddress.zipCode}` : ''}
+                                </p>
+                                <p className="text-sm">{order.shippingAddress?.country || 'India'}</p>
+
+                                {(order.shippingAddress?.phone || order.shippingAddress?.altPhone) && (
+                                  <div className="pt-2 mt-2 border-t border-[#064e3b]/10 space-y-1.5">
+                                    {order.shippingAddress?.phone && (
+                                      <div className="flex items-center gap-2 text-sm">
+                                        <Phone size={14} className="text-[#c5a059] shrink-0" />
+                                        <span className="font-semibold text-xs text-[#064e3b]/60 uppercase tracking-wide">Mobile:</span>
+                                        <a
+                                          href={`tel:${order.shippingAddress.phone}`}
+                                          className="font-bold text-[#064e3b] hover:text-[#c5a059] transition-colors"
+                                        >
+                                          {displayPhone(order.shippingAddress.phone)}
+                                        </a>
+                                      </div>
+                                    )}
+                                    {order.shippingAddress?.altPhone && (
+                                      <div className="flex items-center gap-2 text-sm">
+                                        <Phone size={14} className="text-[#c5a059]/70 shrink-0" />
+                                        <span className="font-semibold text-xs text-[#064e3b]/60 uppercase tracking-wide">Alt Mobile:</span>
+                                        <a
+                                          href={`tel:${order.shippingAddress.altPhone}`}
+                                          className="font-bold text-[#064e3b]/80 hover:text-[#c5a059] transition-colors"
+                                        >
+                                          {displayPhone(order.shippingAddress.altPhone)}
+                                        </a>
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                                {order.shippingAddress?.email && (
+                                  <div className="flex items-center gap-2 text-sm">
+                                    <Mail size={14} className="text-[#c5a059] shrink-0" />
+                                    <span className="font-semibold text-xs text-[#064e3b]/60 uppercase tracking-wide">Email:</span>
+                                    <a
+                                      href={`mailto:${order.shippingAddress.email}`}
+                                      className="text-[#064e3b]/80 hover:text-[#c5a059] transition-colors"
+                                    >
+                                      {order.shippingAddress.email}
+                                    </a>
+                                  </div>
+                                )}
                               </div>
                             </div>
                             <div>
